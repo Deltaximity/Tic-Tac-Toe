@@ -74,14 +74,16 @@ window.addEventListener('load', () => {
     let checkbox = document.createElement('input');
     let label = document.createElement('label');
     let text = document.createTextNode("Vill du begränsa tiden till 5 sekunder per drag?");
+    let startBtn = document.querySelector('#divWithA');
 
     // lägger till några viktiga attribut
+    div.classList.add('m-3'); // bootstrap klass för att göra det lite snyggare (ej nödvändigt)
     checkbox.type = 'checkbox';
     checkbox.id = 'timerCheckbox';
     label.setAttribute('for', checkbox.id);
 
     // skapar en struktur genom att tilldela rätt barn till respektive förälder
-    formContainer.appendChild(div);
+    formContainer.insertBefore(div, startBtn);
     div.appendChild(checkbox);
     div.appendChild(label);
     label.appendChild(text);
@@ -113,7 +115,7 @@ function validateForm() {
             throw "Färgen får inte vara samma";
         }
 
-        // kontrollerar ifall timern är ibokad, ändrar timerEnabled beroende på det true eller false
+        // kontrollerar ifall timern är ibockad, ändrar timerEnabled beroende på det true eller false
         checkbox.checked ? oGameData.timerEnabled = true : oGameData.timerEnabled = false;
 
         // om allt går igenom så uppropar vi funktionen initaiteGame()
@@ -263,8 +265,11 @@ function changePlayer() {
     title.textContent = `Aktuell spelare är: ${playerName} (${playerChar})`;
 
     // ställer om timer så att den börjar på 0 sekunder
-    clearInterval(oGameData.timerId);
-    startTimer();
+    // men först kontrollerar vi ifall timern är på
+    if (oGameData.timerEnabled) {
+        clearInterval(oGameData.timerId);
+        startTimer();
+    }
 }
 
 /**
